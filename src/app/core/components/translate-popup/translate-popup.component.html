@@ -1,0 +1,17 @@
+<div
+  class="popup"
+  role="tooltip"
+  [class.above]="above()"
+  [style.left.px]="left()"
+  [style.top.px]="top()"
+  [style.width.px]="width"
+>
+  <div class="word">{{ word() }}</div>
+  @if (meaning.isLoading()) {
+    <p class="hint">Looking up&hellip;</p>
+  } @else if (meaning.value(); as bengali) {
+    <div class="meaning" lang="bn">{{ bengali }}</div>
+  } @else {
+    <p class="hint">No Bengali meaning added yet. Add it to <code>content/translation.json</code>.</p>
+  }
+</div>

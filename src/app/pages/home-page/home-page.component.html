@@ -1,0 +1,14 @@
+<main class="home">
+  <h1>Choose a subject</h1>
+  <p class="count">{{ subjects().length }} subjects</p>
+  <div class="grid">
+    @for (subject of subjects(); track subject.slug) {
+      <a class="card" [routerLink]="['/', subject.slug]">
+        <h2>{{ subject.title }}</h2>
+        @if (subject.description) {
+          <p>{{ subject.description }}</p>
+        }
+      </a>
+    }
+  </div>
+</main>

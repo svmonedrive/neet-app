@@ -1,0 +1,44 @@
+<div class="layout" [style.--panel-width.px]="panelWidth()">
+  <aside class="panel">
+    <a class="back" routerLink="/">&larr; All subjects</a>
+    <h2><a [routerLink]="['/', subject()]">{{ title() }}</a></h2>
+    <nav>
+      @for (c of chapters.value() ?? []; track c.slug) {
+        <a [routerLink]="['/', subject(), c.slug]" routerLinkActive="active" [title]="c.title">{{ c.title }}</a>
+      }
+    </nav>
+  </aside>
+  <div
+    class="divider"
+    role="separator"
+    aria-orientation="vertical"
+    aria-label="Resize chapter list"
+    [attr.aria-valuenow]="panelWidth()"
+    tabindex="0"
+    (pointerdown)="startResize($event)"
+    (pointermove)="resize($event)"
+    (pointerup)="endResize($event)"
+    (pointercancel)="endResize($event)"
+    (keydown)="resizeWithKeys($event)"
+  ></div>
+  <main class="main">
+    @if (body.error() || sub.error()) {
+      <p class="error">Could not load this page.</p>
+    } @else {
+      @if (chapterPage()?.chips?.length) {
+        <ul class="chips">
+          @for (chip of chapterPage()!.chips; track chip.title) {
+            <li>
+              @if (chip.link) {
+                <a class="chip" [routerLink]="chip.link" routerLinkActive="active">{{ chip.title }}</a>
+              } @else {
+                <span class="chip">{{ chip.title }}</span>
+              }
+            </li>
+          }
+        </ul>
+      }
+      <app-doc-viewer [content]="markdown() ?? ''" />
+    }
+  </main>
+</div>

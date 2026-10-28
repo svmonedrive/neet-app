@@ -1,0 +1,30 @@
+.popup {
+  position: fixed;
+  z-index: 10;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+.popup.above {
+  transform: translateY(-100%);
+}
+.word {
+  color: #6b7280;
+  font-size: 0.75rem;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+.meaning {
+  margin-top: 4px;
+  font-family: 'Nirmala UI', 'Noto Sans Bengali', 'Kohinoor Bangla', 'Segoe UI', sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.4;
+}
+.hint {
+  margin: 4px 0 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+}

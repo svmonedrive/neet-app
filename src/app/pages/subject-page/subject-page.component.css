@@ -1,0 +1,123 @@
+.layout {
+  display: grid;
+  grid-template-columns: var(--panel-width, 300px) 6px 1fr;
+  /* Fixed-height row so each panel scrolls on its own instead of the page. */
+  grid-template-rows: minmax(0, 1fr);
+  height: 100vh;
+  height: 100dvh;
+}
+.panel {
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 16px;
+  background: #f9fafb;
+}
+.divider {
+  background: #e5e7eb;
+  cursor: col-resize;
+  touch-action: none;
+  transition: background 0.15s;
+}
+.divider:hover,
+.divider:focus-visible {
+  background: #4f46e5;
+  outline: none;
+}
+.panel h2 {
+  margin: 16px 0 12px;
+  text-transform: capitalize;
+}
+.panel h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+.back {
+  color: #6b7280;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+nav a {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: inherit;
+  text-decoration: none;
+}
+nav a:hover {
+  background: #eef2ff;
+}
+nav a.active {
+  background: #4f46e5;
+  color: #fff;
+}
+.main {
+  overflow-y: auto;
+  /* No top padding: it would stay visible above the sticky chips. The spacer scrolls away instead. */
+  padding: 0 48px 32px;
+}
+.main::before {
+  content: '';
+  display: block;
+  height: 32px;
+}
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 0 16px;
+  padding: 12px 0;
+  list-style: none;
+  /* Stay at the top of the scrolling main panel; the opaque background hides text scrolling under. */
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+}
+.chip {
+  display: inline-block;
+  padding: 6px 14px;
+  border: 1px solid #c7d2fe;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 0.875rem;
+  text-decoration: none;
+}
+a.chip:hover {
+  background: #e0e7ff;
+}
+a.chip.active {
+  border-color: #4f46e5;
+  background: #4f46e5;
+  color: #fff;
+}
+.error {
+  color: #b91c1c;
+}
+@media (max-width: 720px) {
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    height: auto;
+  }
+  .panel {
+    border-bottom: 1px solid #e5e7eb;
+  }
+  .divider {
+    display: none;
+  }
+  .main {
+    padding: 0 16px 16px;
+  }
+  .main::before {
+    height: 16px;
+  }
+}
