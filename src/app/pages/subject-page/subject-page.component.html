@@ -1,10 +1,17 @@
 <div class="layout" [style.--panel-width.px]="panelWidth()">
   <aside class="panel">
-    <a class="back" routerLink="/">&larr; All subjects</a>
-    <h2><a [routerLink]="['/', subject()]">{{ title() }}</a></h2>
+    <header class="panel-header">
+      <a class="back" routerLink="/">&larr; All subjects</a>
+      <h2><a [routerLink]="['/', subject()]">{{ title() }}</a></h2>
+    </header>
     <nav>
       @for (c of chapters.value() ?? []; track c.slug) {
-        <a [routerLink]="['/', subject(), c.slug]" routerLinkActive="active" [title]="c.title">{{ c.title }}</a>
+        <a
+          [routerLink]="['/', subject(), c.slug]"
+          routerLinkActive="active"
+          [title]="c.title"
+          [attr.data-column]="c.column"
+        >{{ c.title }}</a>
       }
     </nav>
   </aside>

@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Lexer, Tokens, marked } from 'marked';
+import { Lexer, Token, Tokens, marked } from 'marked';
 import { Observable, map } from 'rxjs';
 
 export interface Entry {
   title: string;
   slug: string;
   description: string;
+  /** Zero-based table column the chapter link sits in, when the index is a multi-column table. */
+  column?: number;
 }
 
 export interface Chip {
@@ -100,14 +102,24 @@ export class ContentService {
   private chapterLinks(md: string): Entry[] {
     const seen = new Set<string>();
     const entries: Entry[] = [];
-    marked.walkTokens(Lexer.lex(md), (token) => {
-      if (token.type !== 'link' || !/^[^:/#][^:#]*\.md(#.*)?$/.test(token.href)) return;
-      const slug = token.href.replace(/\.md.*$/, '').replace(/\/index$/, '');
-      if (slug === 'index' || seen.has(slug)) return;
-      seen.add(slug);
-      entries.push({ title: token.text, slug, description: '' });
-    });
-    return entries;
+    const collect = (tokens: Token[], column?: number) =>
+      marked.walkTokens(tokens, (token) => {
+        if (token.type !== 'link' || !/^[^:/#][^:#]*\.md(#.*)?$/.test(token.href)) return;
+        const slug = token.href.replace(/\.md.*$/, '').replace(/\/index$/, '');
+        if (slug === 'index' || seen.has(slug)) return;
+        seen.add(slug);
+        entries.push({ title: token.text, slug, description: '', column });
+      });
+    for (const block of Lexer.lex(md)) {
+      if (block.type === 'table' && (block as Tokens.Table).header.length > 1) {
+        // Remember the column, so the panel can colour a link like its table column.
+        (block as Tokens.Table).rows.forEach((row) => row.forEach((cell, i) => collect(cell.tokens, i)));
+      } else {
+        collect([block]);
+      }
+    }
+    // Folder numbers (01-, 02-, ...) set the order, so a table laid out in columns still lists 1, 2, 3.
+    return entries.sort((a, b) => a.slug.localeCompare(b.slug, undefined, { numeric: true }));
   }
 
   private entries(md: string, slug: (href: string) => string): Entry[] {

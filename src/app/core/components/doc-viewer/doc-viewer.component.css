@@ -8,6 +8,22 @@ app-doc-viewer img {
 app-doc-viewer table {
   border-collapse: collapse;
 }
+app-doc-viewer table a {
+  text-decoration: none;
+}
+/* Multi-column tables (e.g. a subject index): each column's links get the colour the chapter list uses. */
+app-doc-viewer td:nth-child(1):not(:only-child) a {
+  color: var(--column-1);
+}
+app-doc-viewer td:nth-child(2) a {
+  color: var(--column-2);
+}
+app-doc-viewer td:nth-child(3) a {
+  color: var(--column-3);
+}
+app-doc-viewer table a:hover {
+  text-decoration: underline;
+}
 app-doc-viewer :is(th, td) {
   border: 1px solid var(--border);
   padding: 6px 10px;

@@ -21,6 +21,10 @@
   --chip-border: #c7d2fe;
   --chip-text: #3730a3;
   --danger: #b91c1c;
+  /* One colour per table column of a subject index, reused by the chapter list. */
+  --column-1: #15803d;
+  --column-2: #1d4ed8;
+  --column-3: #c2410c;
 }
 
 :root[data-theme='dark'] {
@@ -36,6 +40,9 @@
   --chip-border: #3b4180;
   --chip-text: #c7d2fe;
   --danger: #f87171;
+  --column-1: #4ade80;
+  --column-2: #60a5fa;
+  --column-3: #fb923c;
 }
 
 body {
