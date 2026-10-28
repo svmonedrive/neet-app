@@ -1,35 +1,93 @@
 .home {
-  max-width: 960px;
+  max-width: 1040px;
   margin: 0 auto;
-  padding: 48px 16px;
-}
-.count {
-  color: #6b7280;
-  margin: 0 0 24px;
+  padding: 56px 16px;
+  text-align: center;
 }
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 28px;
+  text-align: center;
 }
 .card {
-  display: block;
-  padding: 24px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+  --accent: #4b5563;
+  --tint: #f3f4f6;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+  padding: 40px 28px 32px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: linear-gradient(180deg, var(--tint) 0, var(--bg) 55%);
   color: inherit;
   text-decoration: none;
-  transition: box-shadow 0.15s, transform 0.15s;
+  transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+}
+/* Coloured bar along the top edge. */
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto;
+  height: 5px;
+  background: var(--accent);
 }
 .card:hover {
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 32px rgba(0, 0, 0, 0.12);
+  transform: translateY(-6px);
+}
+.icon {
+  display: grid;
+  place-items: center;
+  width: 112px;
+  height: 112px;
+  margin-bottom: 24px;
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--accent);
+  box-shadow: 0 0 0 8px var(--tint), 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s;
+}
+.card:hover .icon {
+  transform: scale(1.08) rotate(-4deg);
+}
+.icon svg {
+  width: 68px;
+  height: 68px;
+}
+.biology {
+  --accent: #15803d;
+  --tint: #dcfce7;
+}
+.physics {
+  --accent: #1d4ed8;
+  --tint: #dbeafe;
+}
+.chemistry {
+  --accent: #b45309;
+  --tint: #fef3c7;
 }
 .card h2 {
-  margin: 0 0 8px;
-  font-size: 1.25rem;
+  margin: 0 0 10px;
+  font-size: 1.6rem;
+  color: var(--accent);
 }
 .card p {
   margin: 0;
-  color: #6b7280;
+  color: var(--muted);
+}
+:root[data-theme='dark'] .biology {
+  --accent: #4ade80;
+  --tint: #14321f;
+}
+:root[data-theme='dark'] .physics {
+  --accent: #60a5fa;
+  --tint: #15233f;
+}
+:root[data-theme='dark'] .chemistry {
+  --accent: #fbbf24;
+  --tint: #3a2a0c;
 }

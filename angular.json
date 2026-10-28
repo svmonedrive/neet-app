@@ -56,10 +56,7 @@
                 "input": "public"
               }
             ],
-            "styles": [
-              "node_modules/katex/dist/katex.min.css",
-              "src/styles.css"
-            ]
+            "styles": ["node_modules/katex/dist/katex.min.css", "src/styles.css"]
           },
           "configurations": {
             "production": {
@@ -96,6 +93,12 @@
             }
           },
           "defaultConfiguration": "development"
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy",
+          "options": {
+            "baseHref": "/neet-app/"
+          }
         }
       }
     }

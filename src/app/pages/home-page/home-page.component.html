@@ -1,9 +1,38 @@
 <main class="home">
-  <h1>Choose a subject</h1>
-  <p class="count">{{ subjects().length }} subjects</p>
   <div class="grid">
     @for (subject of subjects(); track subject.slug) {
-      <a class="card" [routerLink]="['/', subject.slug]">
+      <a class="card" [class]="subject.slug" [routerLink]="['/', subject.slug]">
+        <span class="icon" aria-hidden="true">
+          <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            @switch (subject.slug) {
+              @case ('biology') {
+                <!-- DNA double helix -->
+                <path d="M14 6c0 12 20 12 20 24s-20 12-20 12" />
+                <path d="M34 6c0 12-20 12-20 24s20 12 20 12" />
+                <path d="M17 12h14M15 24h18M17 36h14" />
+              }
+              @case ('physics') {
+                <!-- Atom -->
+                <circle cx="24" cy="24" r="3" fill="currentColor" />
+                <ellipse cx="24" cy="24" rx="19" ry="7.5" />
+                <ellipse cx="24" cy="24" rx="19" ry="7.5" transform="rotate(60 24 24)" />
+                <ellipse cx="24" cy="24" rx="19" ry="7.5" transform="rotate(120 24 24)" />
+              }
+              @case ('chemistry') {
+                <!-- Flask -->
+                <path d="M18 6h12M20 6v12L8 38a3 3 0 0 0 2.6 4.5h26.8A3 3 0 0 0 40 38L28 18V6" />
+                <path d="M13 31h22" />
+                <circle cx="22" cy="36" r="1.5" fill="currentColor" />
+                <circle cx="28" cy="34" r="1.5" fill="currentColor" />
+              }
+              @default {
+                <!-- Open book -->
+                <path d="M24 12c-4-3-10-4-17-4v28c7 0 13 1 17 4 4-3 10-4 17-4V8c-7 0-13 1-17 4z" />
+                <path d="M24 12v28" />
+              }
+            }
+          </svg>
+        </span>
         <h2>{{ subject.title }}</h2>
         @if (subject.description) {
           <p>{{ subject.description }}</p>

@@ -10,17 +10,17 @@
   overflow-x: hidden;
   overflow-y: auto;
   padding: 16px;
-  background: #f9fafb;
+  background: var(--surface);
 }
 .divider {
-  background: #e5e7eb;
+  background: var(--border);
   cursor: col-resize;
   touch-action: none;
   transition: background 0.15s;
 }
 .divider:hover,
 .divider:focus-visible {
-  background: #4f46e5;
+  background: var(--accent);
   outline: none;
 }
 .panel h2 {
@@ -32,7 +32,7 @@
   text-decoration: none;
 }
 .back {
-  color: #6b7280;
+  color: var(--muted);
   font-size: 0.875rem;
   text-decoration: none;
 }
@@ -51,10 +51,10 @@ nav a {
   text-decoration: none;
 }
 nav a:hover {
-  background: #eef2ff;
+  background: var(--accent-tint);
 }
 nav a.active {
-  background: #4f46e5;
+  background: var(--accent);
   color: #fff;
 }
 .main {
@@ -72,35 +72,35 @@ nav a.active {
   flex-wrap: wrap;
   gap: 8px;
   margin: 0 0 16px;
-  padding: 12px 0;
+  padding: 12px 48px 12px 0; /* right gap keeps chips clear of the theme button */
   list-style: none;
   /* Stay at the top of the scrolling main panel; the opaque background hides text scrolling under. */
   position: sticky;
   top: 0;
   z-index: 1;
-  background: #fff;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
 }
 .chip {
   display: inline-block;
   padding: 6px 14px;
-  border: 1px solid #c7d2fe;
+  border: 1px solid var(--chip-border);
   border-radius: 999px;
-  background: #eef2ff;
-  color: #3730a3;
+  background: var(--accent-tint);
+  color: var(--chip-text);
   font-size: 0.875rem;
   text-decoration: none;
 }
 a.chip:hover {
-  background: #e0e7ff;
+  background: var(--accent-tint-hover);
 }
 a.chip.active {
-  border-color: #4f46e5;
-  background: #4f46e5;
+  border-color: var(--accent);
+  background: var(--accent);
   color: #fff;
 }
 .error {
-  color: #b91c1c;
+  color: var(--danger);
 }
 @media (max-width: 720px) {
   .layout {
@@ -109,7 +109,7 @@ a.chip.active {
     height: auto;
   }
   .panel {
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border);
   }
   .divider {
     display: none;

@@ -9,6 +9,6 @@ app-doc-viewer table {
   border-collapse: collapse;
 }
 app-doc-viewer :is(th, td) {
-  border: 1px solid #e5e7eb;
+  border: 1px solid var(--border);
   padding: 6px 10px;
 }
