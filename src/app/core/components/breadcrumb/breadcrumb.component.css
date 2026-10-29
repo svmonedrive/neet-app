@@ -112,3 +112,14 @@ a:hover {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+/* Phones: a plain "A / B / C" trail. Tapping an earlier crumb goes back to it; there are no menus. */
+@media (max-width: 720px) {
+  .crumb-arrow {
+    display: none;
+  }
+  li + li::before {
+    content: '/';
+    margin: 0 8px;
+    color: var(--muted);
+  }
+}
