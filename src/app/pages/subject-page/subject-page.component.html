@@ -52,19 +52,7 @@
     @if (body.error() || sub.error()) {
       <p class="error">Could not load this page.</p>
     } @else {
-      @if (chapterPage()?.chips?.length) {
-        <ul class="chips">
-          @for (chip of chapterPage()!.chips; track chip.title) {
-            <li>
-              @if (chip.link) {
-                <a class="chip" [routerLink]="chip.link" routerLinkActive="active">{{ chip.title }}</a>
-              } @else {
-                <span class="chip">{{ chip.title }}</span>
-              }
-            </li>
-          }
-        </ul>
-      }
+      <app-breadcrumb class="crumbbar" [items]="crumbs()" />
       <app-doc-viewer [content]="markdown() ?? ''" />
     }
   </main>

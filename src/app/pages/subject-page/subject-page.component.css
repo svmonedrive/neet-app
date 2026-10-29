@@ -56,7 +56,7 @@ nav {
 }
 .main {
   overflow-y: auto;
-  /* No top padding: it would stay visible above the sticky chips. The spacer scrolls away instead. */
+  /* No top padding: it would stay visible above the sticky breadcrumb. The spacer scrolls away instead. */
   padding: 0 48px 32px;
 }
 .main::before {
@@ -64,37 +64,15 @@ nav {
   display: block;
   height: 32px;
 }
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+.crumbbar {
   margin: 0 0 16px;
-  padding: 12px 48px 12px 0; /* right gap keeps chips clear of the theme button */
-  list-style: none;
+  padding: 12px 48px 12px 0; /* right gap keeps the trail clear of the theme button */
   /* Stay at the top of the scrolling main panel; the opaque background hides text scrolling under. */
   position: sticky;
   top: 0;
   z-index: 1;
   background: var(--bg);
   border-bottom: 1px solid var(--border);
-}
-.chip {
-  display: inline-block;
-  padding: 6px 14px;
-  border: 1px solid var(--chip-border);
-  border-radius: 999px;
-  background: var(--accent-tint);
-  color: var(--chip-text);
-  font-size: 0.875rem;
-  text-decoration: none;
-}
-a.chip:hover {
-  background: var(--accent-tint-hover);
-}
-a.chip.active {
-  border-color: var(--accent);
-  background: var(--accent);
-  color: #fff;
 }
 .error {
   color: var(--danger);
@@ -174,24 +152,8 @@ a.chip.active {
   .main::before {
     height: 16px;
   }
-  /* The theme button sits in the top bar here, so the chips no longer need to dodge it. */
-  .chips {
-    padding-right: 0;
-  }
-  /* One horizontally scrolling row instead of wrapping onto several lines. */
-  .chips {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-  .chips::-webkit-scrollbar {
+  /* The trail lives in the top bar here. */
+  .crumbbar {
     display: none;
-  }
-  .chips li {
-    flex: none;
-  }
-  .chip {
-    white-space: nowrap;
   }
 }

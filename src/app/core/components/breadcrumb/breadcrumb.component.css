@@ -23,11 +23,6 @@ li {
   display: flex;
   align-items: center;
 }
-li + li::before {
-  content: '/';
-  margin: 0 8px;
-  color: var(--muted);
-}
 a {
   color: var(--muted);
   text-decoration: none;
@@ -38,4 +33,82 @@ a:hover {
 }
 [aria-current='page'] {
   font-weight: 600;
+}
+.crumb-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: 0 2px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: var(--muted);
+  cursor: pointer;
+}
+.crumb-arrow:hover,
+.crumb-arrow.open {
+  background: var(--accent-tint);
+  color: var(--accent);
+}
+/* A right-pointing chevron drawn with borders; the open arrow turns to point down. */
+.chevron {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  transform: rotate(45deg);
+  transition: transform 0.15s;
+}
+.crumb-arrow.open .chevron {
+  transform: rotate(135deg);
+}
+.crumb-menu {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 280px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+.crumb-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 6px;
+  color: var(--text);
+  text-decoration: none;
+  cursor: pointer;
+}
+.crumb-menu a:hover,
+.crumb-menu a:focus-visible {
+  background: var(--accent-tint);
+  outline: none;
+}
+/* The page the trail goes through: the same light tint as hover/focus, plus bold so it still stands out. */
+.crumb-menu a.current {
+  background: var(--accent-tint);
+  font-weight: 600;
+}
+.crumb-menu .empty {
+  padding: 8px 10px;
+  color: var(--muted);
+}
+.crumb-menu .label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }

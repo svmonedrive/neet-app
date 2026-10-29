@@ -11,17 +11,9 @@ export interface Entry {
   column?: number;
 }
 
-export interface Chip {
-  title: string;
-  /** App route of the sub-chapter, or null when the item has no link. */
-  link: string | null;
-}
-
 export interface Chapter {
-  /** Markdown to render, without the leading list that became chips. */
+  /** Markdown to render. */
   markdown: string;
-  /** Items of the list that directly follows the chapter heading (sub-chapters). */
-  chips: Chip[];
 }
 
 const CONTENT_ROOT = 'content';
@@ -46,7 +38,6 @@ export class ContentService {
    *  - `04-plant-physiology`            -> <subject>/04-plant-physiology/index.md (a chapter)
    *  - `04-plant-physiology/4-1-photo`  -> <subject>/04-plant-physiology/4-1-photo.md (a sub-chapter)
    * Relative images are made absolute and relative `.md` links become app routes.
-   * Only a chapter's leading list becomes chips; index and sub-chapter pages render as written.
    */
   chapter(subject: string, path: string): Observable<Chapter> {
     const isChapter = path !== 'index' && !path.includes('/');
@@ -63,13 +54,13 @@ export class ContentService {
             (_, open, target, hash = '') => `${open}${this.route(subject, dir + target)}${hash})`,
           ),
       ),
-      map((md) => (isChapter ? this.splitChips(md) : { markdown: md, chips: [] })),
+      map((markdown) => ({ markdown })),
     );
   }
 
   /**
    * Titles of every page whose parent list was loaded, keyed `<subject>/<route path>`. The
-   * breadcrumb reads it for sub-chapters that are not chips of their chapter.
+   * breadcrumb reads it for every level below the chapter.
    */
   readonly titles = signal<Record<string, string>>({});
 
@@ -113,30 +104,6 @@ export class ContentService {
   /** App route for a content path:`04-x/index` -> `/biology/04-x`, `04-x/4-1-y` -> `/biology/04-x/4-1-y`. */
   private route(subject: string, path: string): string {
     return `/${subject}/${path}`.replace(/\/index$/, '');
-  }
-
-  /** A list right after the heading is shown as chips instead of as page content. */
-  private splitChips(md: string): Chapter {
-    const tokens = Lexer.lex(md);
-    const meaningful = tokens.filter((t) => t.type !== 'space');
-    const candidate = meaningful[0]?.type === 'heading' ? meaningful[1] : undefined;
-    if (!candidate || candidate.type !== 'list') return { markdown: md, chips: [] };
-    const list = candidate as Tokens.List;
-    return {
-      markdown: tokens
-        .filter((t) => t !== list)
-        .map((t) => t.raw)
-        .join(''),
-      chips: list.items.map((item) => this.chip(item)),
-    };
-  }
-
-  private chip(item: Tokens.ListItem): Chip {
-    let link: Tokens.Link | undefined;
-    marked.walkTokens(item.tokens, (token) => {
-      if (!link && token.type === 'link') link = token as Tokens.Link;
-    });
-    return link ? { title: link.text, link: link.href } : { title: item.text.trim(), link: null };
   }
 
   private read(path: string): Observable<string> {

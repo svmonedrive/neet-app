@@ -1,0 +1,51 @@
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <ol>
+    @for (crumb of items(); track $index; let last = $last) {
+      <li>
+        @if (crumb.link) {
+          <a [routerLink]="crumb.link">{{ crumb.label }}</a>
+        } @else {
+          <span aria-current="page">{{ crumb.label }}</span>
+        }
+        @if (!last || lastHasChoices()) {
+          <button
+            type="button"
+            class="crumb-arrow"
+            #trigger="cdkMenuTriggerFor"
+            [class.open]="trigger.isOpen()"
+            [attr.aria-label]="'Pages in ' + crumb.label"
+            [cdkMenuTriggerFor]="level"
+            [cdkMenuTriggerData]="{ $implicit: crumb.path, root: trigger }"
+            (cdkMenuOpened)="load(crumb.path ?? '')"
+          ><span class="chevron"></span></button>
+        }
+      </li>
+    }
+  </ol>
+</nav>
+
+<!-- One menu level for a route path. An entry with pages of its own opens this template again. -->
+<ng-template #level let-path let-root="root">
+  <div class="crumb-menu" cdkMenu>
+    @let choices = tree()[path];
+    @for (choice of choices; track choice.link) {
+      @let kids = !!tree()[choice.path]?.length;
+      <a
+        cdkMenuItem
+        [routerLink]="choice.link"
+        [class.current]="onTrail(choice.path)"
+        [cdkMenuTriggerFor]="kids ? level : null"
+        [cdkMenuTriggerData]="{ $implicit: choice.path, root }"
+        (cdkMenuOpened)="load(choice.path)"
+        (click)="root.close()"
+      >
+        <span class="label">{{ choice.title }}</span>
+        @if (kids) {
+          <span class="chevron"></span>
+        }
+      </a>
+    } @empty {
+      <span class="empty">{{ choices ? 'No pages' : 'Loading…' }}</span>
+    }
+  </div>
+</ng-template>

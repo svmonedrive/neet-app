@@ -1,6 +1,6 @@
 import { Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { BreadcrumbComponent, Crumb } from '../../core/components/breadcrumb/breadcrumb.component';
 import { DocViewerComponent } from '../../core/components/doc-viewer/doc-viewer.component';
 import { NavNodeComponent } from '../../core/components/nav-node/nav-node.component';
@@ -13,7 +13,7 @@ const STORAGE_KEY = 'subject-panel-width';
 
 @Component({
   selector: 'app-subject-page',
-  imports: [RouterLink, RouterLinkActive, BreadcrumbComponent, DocViewerComponent, NavNodeComponent],
+  imports: [RouterLink, BreadcrumbComponent, DocViewerComponent, NavNodeComponent],
   templateUrl: './subject-page.component.html',
   styleUrl: './subject-page.component.css',
 })
@@ -30,8 +30,8 @@ export class SubjectPageComponent {
     stream: ({ params }) => this.content.chapters(params),
   });
 
-  // No chapter in the URL: show the subject's index.md. The chapter is kept loaded while one of
-  // its sub-chapters is open, because its chips are the way to switch between them.
+  // No chapter in the URL: show the subject's index.md. The chapter stays loaded while one of its
+  // sub-chapters is open, so going back to it does not blink.
   protected readonly body = rxResource({
     params: () => ({ subject: this.subject(), chapter: this.chapter() ?? 'index' }),
     stream: ({ params }) => this.content.chapter(params.subject, params.chapter),
@@ -47,7 +47,7 @@ export class SubjectPageComponent {
 
   // A resource's value is empty while the next file loads. Keep showing the previous page until
   // then so the panel does not blink: any chapter for the chapter page, but only a sub-chapter
-  // of the same chapter, so another chapter's text is never shown under the wrong chips.
+  // of the same chapter, so another chapter's text is never shown under the wrong chapter.
   protected readonly chapterPage = linkedSignal<Chapter | undefined, Chapter | undefined>({
     source: () => this.body.value(),
     computation: (value, previous) => value ?? previous?.value,
@@ -81,12 +81,12 @@ export class SubjectPageComponent {
     const chapter = this.chapter();
     const sub = this.subchapter();
     const name = this.title().replace(/\b\p{L}/gu, (c) => c.toUpperCase());
-    const trail: Crumb[] = [{ label: name, link: `/${subject}` }];
-    if (!chapter) return [{ label: trail[0].label }];
+    const trail: Crumb[] = [{ label: name, link: `/${subject}`, path: subject }];
+    if (!chapter) return [{ label: name, path: subject }];
 
     const chapterTitle = this.chapters.value()?.find((c) => c.slug === chapter)?.title ?? chapter;
-    if (!sub) return [trail[0], { label: chapterTitle }];
-    trail.push({ label: chapterTitle, link: `/${subject}/${chapter}` });
+    if (!sub) return [trail[0], { label: chapterTitle, path: `${subject}/${chapter}` }];
+    trail.push({ label: chapterTitle, link: `/${subject}/${chapter}`, path: `${subject}/${chapter}` });
 
     // One crumb per level below the chapter. Titles come from the lists the panel has loaded.
     const titles = this.content.titles();
@@ -95,7 +95,8 @@ export class SubjectPageComponent {
     levels.forEach((level, i) => {
       path += `/${level}`;
       const label = titles[`${subject}/${path}`] ?? level;
-      trail.push(i === levels.length - 1 ? { label } : { label, link: `/${subject}/${path}` });
+      const crumb: Crumb = { label, path: `${subject}/${path}` };
+      trail.push(i === levels.length - 1 ? crumb : { ...crumb, link: `/${subject}/${path}` });
     });
     return trail;
   });
