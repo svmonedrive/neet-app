@@ -57,6 +57,7 @@ export class ContentService {
       map((md) =>
         md
           .replace(/(!\[[^\]]*\]\()(?!https?:|\/|data:)([^)\s]+)/g, (_, open, src) => open + base + src)
+          .replace(/(<img\b[^>]*?\bsrc=")(?!https?:|\/|data:)([^"]+)/g, (_, open, src) => open + base + src)
           .replace(
             /(?<!!)(\[[^\]]*\]\()(?!https?:|\/|#|mailto:)([^)\s#]+?)\.md(#[^)\s]*)?\)/g,
             (_, open, target, hash = '') => `${open}${this.route(subject, dir + target)}${hash})`,

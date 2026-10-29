@@ -1,0 +1,71 @@
+.card-dialog {
+  display: flex;
+  flex-direction: column;
+  width: 60vw;
+  height: 70vh;
+  min-width: 280px;
+  min-height: 160px;
+  max-width: 95vw;
+  max-height: 90vh;
+  resize: both;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+}
+.card-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+  cursor: move;
+  user-select: none;
+}
+.card-dialog-header button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 16px;
+  cursor: pointer;
+}
+.card-dialog-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 4px 16px 12px;
+}
+.card-dialog-body .portrait {
+  float: left;
+  width: 220px;
+  margin: 12px 16px 8px 0;
+  text-align: center;
+}
+.card-dialog-body .portrait img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.card-dialog-body .portrait figcaption {
+  margin-top: 4px;
+  font-size: 11px;
+  opacity: 0.7;
+}
+.card-dialog-body .avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-size: 32px;
+  font-weight: 600;
+}

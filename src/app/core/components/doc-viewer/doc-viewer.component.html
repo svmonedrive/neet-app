@@ -1,4 +1,4 @@
-<markdown class="md" [data]="content()" (click)="onClick($event)" (dblclick)="onDoubleClick()" />
+<markdown class="md" [data]="content()" (click)="onClick($event)" (dblclick)="onDoubleClick()" (ready)="makeColumnsResizable()" />
 @if (lookup(); as lookup) {
   <app-translate-popup [word]="lookup.word" [anchor]="lookup.anchor" />
 }

@@ -24,7 +24,109 @@ app-doc-viewer td:nth-child(3) a {
 app-doc-viewer table a:hover {
   text-decoration: underline;
 }
+app-doc-viewer th {
+  position: relative;
+}
+app-doc-viewer .table-wrap {
+  position: relative;
+  width: fit-content;
+  margin-top: 28px;
+}
+app-doc-viewer .table-expand {
+  position: absolute;
+  top: -26px;
+  right: 0;
+  padding: 0 8px;
+  line-height: 22px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: inherit;
+  cursor: pointer;
+}
+app-doc-viewer .table-expand:hover {
+  border-color: var(--column-1);
+}
+app-doc-viewer .col-resizer {
+  position: absolute;
+  top: 0;
+  right: -3px;
+  width: 7px;
+  height: 100%;
+  cursor: col-resize;
+  touch-action: none;
+  z-index: 1;
+}
+app-doc-viewer .col-resizer:hover {
+  background: var(--column-1);
+  opacity: 0.4;
+}
 app-doc-viewer :is(th, td) {
   border: 1px solid var(--border);
   padding: 6px 10px;
+}
+app-doc-viewer .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  gap: 16px;
+}
+app-doc-viewer .card {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  height: 200px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+}
+app-doc-viewer .card:hover {
+  border-color: var(--accent);
+}
+app-doc-viewer .card-header {
+  padding: 10px 14px;
+  font-weight: 600;
+  background: var(--accent);
+  color: #fff;
+}
+app-doc-viewer .portrait {
+  float: left;
+  width: 84px;
+  margin: 8px 12px 4px 0;
+  text-align: center;
+}
+app-doc-viewer .portrait img {
+  display: block;
+  width: 84px;
+  height: 104px;
+  object-fit: cover;
+  object-position: 30% 30%;
+  border-radius: 6px;
+}
+app-doc-viewer .portrait figcaption {
+  margin-top: 2px;
+  font-size: 9px;
+  line-height: 1.2;
+  opacity: 0.7;
+}
+app-doc-viewer .avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent-tint);
+  color: var(--accent);
+  font-size: 22px;
+  font-weight: 600;
+}
+app-doc-viewer .card-body {
+  flex: 1;
+  min-height: 0;
+  padding: 4px 14px;
+  /* Cards are previews: the text fades out and the full biography opens in the dialog. */
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(#000 70%, transparent);
+  mask-image: linear-gradient(#000 70%, transparent);
 }
