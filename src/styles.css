@@ -25,6 +25,8 @@
   --column-1: #15803d;
   --column-2: #1d4ed8;
   --column-3: #c2410c;
+  /* Background for <mark> highlights in the rendered markdown. */
+  --highlight: #fef08a;
 }
 
 :root[data-theme='dark'] {
@@ -43,6 +45,7 @@
   --column-1: #4ade80;
   --column-2: #60a5fa;
   --column-3: #fb923c;
+  --highlight: #854d0e;
 }
 
 body {

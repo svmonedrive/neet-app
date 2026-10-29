@@ -1,6 +1,12 @@
 app-doc-viewer {
   display: block;
-  max-width: 820px;
+  max-width: 100%;
+}
+app-doc-viewer mark {
+  background: var(--highlight);
+  color: inherit;
+  padding: 0 2px;
+  border-radius: 2px;
 }
 app-doc-viewer img {
   max-width: 100%;
