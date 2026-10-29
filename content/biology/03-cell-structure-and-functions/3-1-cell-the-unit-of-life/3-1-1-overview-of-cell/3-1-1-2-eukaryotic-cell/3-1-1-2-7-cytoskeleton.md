@@ -1,0 +1,1 @@
+An elaborate network of filamentous proteinaceous structures consisting of microtubules, microfilaments and intermediate filaments present in the cytoplasm is collectively referred to as the cytoskeleton. The cytoskeleton in a cell are involved in many functions such as mechanical support, motility, maintenance of the shape of the cell.
