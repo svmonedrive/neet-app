@@ -1,0 +1,41 @@
+<!-- A click anywhere on the row toggles it; a click on the label also navigates. -->
+<div
+  class="node-row"
+  routerLinkActive="active"
+  [routerLinkActiveOptions]="{ exact: true }"
+  [style.margin-left.px]="depth() * 14"
+  [attr.data-column]="column()"
+  (click)="open.set(!open())"
+>
+  <a [routerLink]="link()" [title]="title()">{{ title() }}</a>
+  @if (children().length) {
+    <button
+      type="button"
+      class="node-toggle"
+      [class.open]="open()"
+      [attr.aria-expanded]="open()"
+      [attr.aria-label]="(open() ? 'Collapse ' : 'Expand ') + title()"
+    >
+      <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true">
+        <polyline points="5,2 11,8 5,14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+    </button>
+  } @else {
+    <span class="node-toggle"></span>
+  }
+</div>
+@if (open()) {
+  <div class="node-children" animate.enter="node-expand" animate.leave="node-collapse">
+    <div class="node-children-inner">
+      @for (child of children(); track child.slug) {
+        <app-nav-node
+          [subject]="subject()"
+          [path]="child.slug"
+          [title]="child.title"
+          [current]="current()"
+          [depth]="depth() + 1"
+        />
+      }
+    </div>
+  </div>
+}
