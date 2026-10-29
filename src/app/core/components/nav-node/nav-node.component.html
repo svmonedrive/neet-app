@@ -8,7 +8,7 @@
   (click)="open.set(!open())"
 >
   <a [routerLink]="link()" [title]="title()">{{ title() }}</a>
-  @if (children().length) {
+  @if (expandable()) {
     <button
       type="button"
       class="node-toggle"

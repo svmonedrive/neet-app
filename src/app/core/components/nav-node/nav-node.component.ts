@@ -39,10 +39,16 @@ export class NavNodeComponent {
   protected readonly open = linkedSignal(() => this.onTrail());
 
   private readonly childList = rxResource({
-    params: () => (this.depth() > 0 || this.onTrail() ? { subject: this.subject(), path: this.path() } : undefined),
+    params: () =>
+      this.depth() > 0 || this.onTrail() || this.open() ? { subject: this.subject(), path: this.path() } : undefined,
     stream: ({ params }) =>
       this.content.children(params.subject, params.path).pipe(catchError(() => of([]))),
   });
 
   protected readonly children = computed(() => this.childList.value() ?? []);
+
+  /** A closed chapter has not fetched its children yet, so it shows the arrow until it learns it has none. */
+  protected readonly expandable = computed(
+    () => this.children().length > 0 || (this.depth() === 0 && !this.childList.hasValue()),
+  );
 }
