@@ -56,7 +56,11 @@
                 "input": "public"
               }
             ],
-            "styles": ["node_modules/katex/dist/katex.min.css", "node_modules/@angular/cdk/overlay-prebuilt.css", "src/styles.css"]
+            "styles": [
+              "node_modules/katex/dist/katex.min.css",
+              "node_modules/@angular/cdk/overlay-prebuilt.css",
+              "src/styles.css"
+            ]
           },
           "configurations": {
             "production": {
@@ -72,7 +76,8 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "serviceWorker": "ngsw-config.json"
             },
             "development": {
               "optimization": false,

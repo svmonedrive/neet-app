@@ -19,6 +19,7 @@
     "@angular/forms": "^22.2.0",
     "@angular/platform-browser": "^22.2.0",
     "@angular/router": "^22.2.0",
+    "@angular/service-worker": "^22.2.0",
     "katex": "^0.16.47",
     "marked": "^18.1.2",
     "marked-katex-extension": "^5.1.13",
