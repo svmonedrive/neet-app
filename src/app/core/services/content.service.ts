@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, signal } from '@angular/core';
 import { Lexer, Token, Tokens, marked } from 'marked';
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 
 export interface Entry {
   title: string;
@@ -67,7 +67,50 @@ export class ContentService {
     );
   }
 
-  /** App route for a content path: `04-x/index` -> `/biology/04-x`, `04-x/4-1-y` -> `/biology/04-x/4-1-y`. */
+  /**
+   * Titles of every page whose parent list was loaded, keyed `<subject>/<route path>`. The
+   * breadcrumb reads it for sub-chapters that are not chips of their chapter.
+   */
+  readonly titles = signal<Record<string, string>>({});
+
+  /**
+   * The pages directly below a route path, from the `.md` links in its markdown. A chapter's
+   * children sit beside its index.md; a sub-chapter `x` keeps its children in the folder `x/`, so
+   * only links into that folder count and cross-references to other pages are ignored.
+   */
+  children(subject: string, path: string): Observable<Entry[]> {
+    const isChapter = !path.includes('/');
+    const file = isChapter ? `${path}/index` : path;
+    const name = path.slice(path.lastIndexOf('/') + 1);
+    const parentDir = isChapter ? `${path}/` : path.slice(0, path.length - name.length);
+    const prefix = isChapter ? '' : `${name}/`;
+    return this.read(`${subject}/${file}.md`).pipe(
+      map((md) => {
+        const seen = new Set<string>();
+        const entries: Entry[] = [];
+        marked.walkTokens(Lexer.lex(md), (token) => {
+          if (token.type !== 'link') return;
+          const href = (token as Tokens.Link).href;
+          if (!/^[^:/#][^:#]*\.md(#.*)?$/.test(href)) return;
+          const target = href.replace(/\.md.*$/, '');
+          if (target === 'index' || !target.startsWith(prefix) || (isChapter && target.includes('/'))) return;
+          const slug = parentDir + target;
+          if (seen.has(slug)) return;
+          seen.add(slug);
+          entries.push({ title: (token as Tokens.Link).text, slug, description: '' });
+        });
+        return entries;
+      }),
+      tap((entries) =>
+        this.titles.update((all) => ({
+          ...all,
+          ...Object.fromEntries(entries.map((e) => [`${subject}/${e.slug}`, e.title])),
+        })),
+      ),
+    );
+  }
+
+  /** App route for a content path:`04-x/index` -> `/biology/04-x`, `04-x/4-1-y` -> `/biology/04-x/4-1-y`. */
   private route(subject: string, path: string): string {
     return `/${subject}/${path}`.replace(/\/index$/, '');
   }

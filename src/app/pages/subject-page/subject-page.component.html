@@ -22,12 +22,13 @@
     </header>
     <nav>
       @for (c of chapters.value() ?? []; track c.slug) {
-        <a
-          [routerLink]="['/', subject(), c.slug]"
-          routerLinkActive="active"
+        <app-nav-node
+          [subject]="subject()"
+          [path]="c.slug"
           [title]="c.title"
-          [attr.data-column]="c.column"
-        >{{ c.title }}</a>
+          [column]="c.column"
+          [current]="currentPath()"
+        />
       }
     </nav>
   </aside>

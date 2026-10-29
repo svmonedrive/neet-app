@@ -3,6 +3,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { BreadcrumbComponent, Crumb } from '../../core/components/breadcrumb/breadcrumb.component';
 import { DocViewerComponent } from '../../core/components/doc-viewer/doc-viewer.component';
+import { NavNodeComponent } from '../../core/components/nav-node/nav-node.component';
 import { Chapter, ContentService } from '../../core/services/content.service';
 
 const MIN_PANEL_WIDTH = 200;
@@ -12,7 +13,7 @@ const STORAGE_KEY = 'subject-panel-width';
 
 @Component({
   selector: 'app-subject-page',
-  imports: [RouterLink, RouterLinkActive, BreadcrumbComponent, DocViewerComponent],
+  imports: [RouterLink, RouterLinkActive, BreadcrumbComponent, DocViewerComponent, NavNodeComponent],
   templateUrl: './subject-page.component.html',
   styleUrl: './subject-page.component.css',
 })
@@ -67,6 +68,11 @@ export class SubjectPageComponent {
 
   protected readonly panelWidth = signal(this.savedPanelWidth());
 
+  /** Route path of the open page below the subject, which the panel tree opens its rows along. */
+  protected readonly currentPath = computed(() =>
+    [this.chapter(), this.subchapter()].filter(Boolean).join('/'),
+  );
+
   protected readonly title = computed(() => this.subject().replace(/-/g, ' '));
 
   /** Subject / chapter / sub-chapter; every crumb but the last links back to its page. */
@@ -79,12 +85,19 @@ export class SubjectPageComponent {
     if (!chapter) return [{ label: trail[0].label }];
 
     const chapterTitle = this.chapters.value()?.find((c) => c.slug === chapter)?.title ?? chapter;
-    trail.push({ label: chapterTitle, link: `/${subject}/${chapter}` });
     if (!sub) return [trail[0], { label: chapterTitle }];
+    trail.push({ label: chapterTitle, link: `/${subject}/${chapter}` });
 
-    const subTitle =
-      this.chapterPage()?.chips.find((chip) => chip.link?.endsWith(`/${chapter}/${sub}`))?.title ?? sub;
-    return [...trail, { label: subTitle }];
+    // One crumb per level below the chapter. Titles come from the lists the panel has loaded.
+    const titles = this.content.titles();
+    const levels = sub.split('/');
+    let path = chapter;
+    levels.forEach((level, i) => {
+      path += `/${level}`;
+      const label = titles[`${subject}/${path}`] ?? level;
+      trail.push(i === levels.length - 1 ? { label } : { label, link: `/${subject}/${path}` });
+    });
+    return trail;
   });
 
   /** Phones only: whether the chapter list drawer is open. */
