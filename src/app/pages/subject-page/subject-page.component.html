@@ -1,5 +1,21 @@
-<div class="layout" [style.--panel-width.px]="panelWidth()">
-  <aside class="panel">
+<div
+  class="layout"
+  [class.drawer-open]="drawerOpen()"
+  [style.--panel-width.px]="panelWidth()"
+  (document:keydown.escape)="drawerOpen.set(false)"
+>
+  <!-- Phones only: the chapter list lives in a drawer opened from here. -->
+  <div class="topbar">
+    <button
+      type="button"
+      class="menu-button"
+      aria-label="Open chapter list"
+      [attr.aria-expanded]="drawerOpen()"
+      (click)="drawerOpen.set(true)"
+    >&#9776;</button>
+    <app-breadcrumb class="topbar-crumbs" [items]="crumbs()" />
+  </div>
+  <aside class="panel" (click)="closeDrawerOnLink($event)">
     <header class="panel-header">
       <a class="back" routerLink="/">&larr; All subjects</a>
       <h2><a [routerLink]="['/', subject()]">{{ title() }}</a></h2>
@@ -15,6 +31,9 @@
       }
     </nav>
   </aside>
+  @if (drawerOpen()) {
+    <div class="backdrop" (click)="drawerOpen.set(false)"></div>
+  }
   <div
     class="divider"
     role="separator"

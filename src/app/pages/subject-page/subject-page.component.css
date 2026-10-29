@@ -124,14 +124,74 @@ a.chip.active {
 .error {
   color: var(--danger);
 }
+.topbar,
+.backdrop {
+  display: none;
+}
 @media (max-width: 720px) {
+  /* A top bar over a scrolling content area; the chapter list is a drawer on top of both. */
   .layout {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    height: auto;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    /* Right gap keeps the title clear of the fixed theme button. */
+    padding: 8px 68px 8px 8px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  .menu-button {
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  .menu-button:hover,
+  .menu-button:focus-visible {
+    background: var(--accent-tint);
+  }
+  .topbar-crumbs {
+    flex: 1;
+    min-width: 0;
+    font-size: 1rem;
   }
   .panel {
-    border-bottom: 1px solid var(--border);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    width: min(85vw, 340px);
+    border-right: 1px solid var(--border);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.25);
+    transform: translateX(-100%);
+    /* Hidden while closed so tabbing and screen readers skip the off-screen links. */
+    visibility: hidden;
+    transition: transform 0.2s ease, visibility 0s 0.2s;
+  }
+  .drawer-open .panel {
+    transform: none;
+    visibility: visible;
+    transition: transform 0.2s ease;
+  }
+  .backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 25;
+    background: rgba(0, 0, 0, 0.4);
+  }
+  nav a {
+    padding: 12px;
   }
   .divider {
     display: none;
@@ -141,5 +201,25 @@ a.chip.active {
   }
   .main::before {
     height: 16px;
+  }
+  /* The theme button sits in the top bar here, so the chips no longer need to dodge it. */
+  .chips {
+    padding-right: 0;
+  }
+  /* One horizontally scrolling row instead of wrapping onto several lines. */
+  .chips {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chips::-webkit-scrollbar {
+    display: none;
+  }
+  .chips li {
+    flex: none;
+  }
+  .chip {
+    white-space: nowrap;
   }
 }

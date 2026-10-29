@@ -1,6 +1,7 @@
 import { Component, computed, inject, input, linkedSignal, signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { BreadcrumbComponent, Crumb } from '../../core/components/breadcrumb/breadcrumb.component';
 import { DocViewerComponent } from '../../core/components/doc-viewer/doc-viewer.component';
 import { Chapter, ContentService } from '../../core/services/content.service';
 
@@ -11,7 +12,7 @@ const STORAGE_KEY = 'subject-panel-width';
 
 @Component({
   selector: 'app-subject-page',
-  imports: [RouterLink, RouterLinkActive, DocViewerComponent],
+  imports: [RouterLink, RouterLinkActive, BreadcrumbComponent, DocViewerComponent],
   templateUrl: './subject-page.component.html',
   styleUrl: './subject-page.component.css',
 })
@@ -67,6 +68,32 @@ export class SubjectPageComponent {
   protected readonly panelWidth = signal(this.savedPanelWidth());
 
   protected readonly title = computed(() => this.subject().replace(/-/g, ' '));
+
+  /** Subject / chapter / sub-chapter; every crumb but the last links back to its page. */
+  protected readonly crumbs = computed<Crumb[]>(() => {
+    const subject = this.subject();
+    const chapter = this.chapter();
+    const sub = this.subchapter();
+    const name = this.title().replace(/\b\p{L}/gu, (c) => c.toUpperCase());
+    const trail: Crumb[] = [{ label: name, link: `/${subject}` }];
+    if (!chapter) return [{ label: trail[0].label }];
+
+    const chapterTitle = this.chapters.value()?.find((c) => c.slug === chapter)?.title ?? chapter;
+    trail.push({ label: chapterTitle, link: `/${subject}/${chapter}` });
+    if (!sub) return [trail[0], { label: chapterTitle }];
+
+    const subTitle =
+      this.chapterPage()?.chips.find((chip) => chip.link?.endsWith(`/${chapter}/${sub}`))?.title ?? sub;
+    return [...trail, { label: subTitle }];
+  });
+
+  /** Phones only: whether the chapter list drawer is open. */
+  protected readonly drawerOpen = signal(false);
+
+  /** Picking a chapter (or any link in the panel) closes the drawer so the content shows. */
+  protected closeDrawerOnLink(event: MouseEvent): void {
+    if ((event.target as HTMLElement).closest('a')) this.drawerOpen.set(false);
+  }
 
   protected startResize(event: PointerEvent): void {
     const divider = event.currentTarget as HTMLElement;

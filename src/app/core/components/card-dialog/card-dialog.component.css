@@ -15,6 +15,28 @@
   color: var(--text);
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
 }
+/* Phones: a full-screen sheet; moving and resizing make no sense on a touch screen. */
+@media (max-width: 720px) {
+  .card-dialog {
+    width: 100vw;
+    height: 100dvh;
+    max-width: 100vw;
+    max-height: 100dvh;
+    border-radius: 0;
+    resize: none;
+  }
+  .card-dialog-header {
+    cursor: default;
+    padding: 14px 16px;
+  }
+  .card-dialog-header button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+  .card-dialog-body .portrait {
+    width: 120px;
+  }
+}
 .card-dialog-header {
   display: flex;
   align-items: center;

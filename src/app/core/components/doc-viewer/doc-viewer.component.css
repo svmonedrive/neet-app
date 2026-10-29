@@ -121,6 +121,25 @@ app-doc-viewer .avatar {
   font-size: 22px;
   font-weight: 600;
 }
+@media (max-width: 720px) {
+  app-doc-viewer .cards {
+    grid-template-columns: 1fr;
+  }
+  app-doc-viewer .card {
+    width: 100%;
+  }
+  /* Tables scroll sideways inside their own box; dragging column borders is mouse-only. */
+  app-doc-viewer .table-wrap {
+    width: auto;
+    max-width: 100%;
+    margin-top: 0;
+    overflow-x: auto;
+  }
+  app-doc-viewer .table-expand,
+  app-doc-viewer .col-resizer {
+    display: none;
+  }
+}
 app-doc-viewer .card-body {
   flex: 1;
   min-height: 0;

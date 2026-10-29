@@ -12,7 +12,7 @@ export interface CardDialogData {
   selector: 'app-card-dialog',
   imports: [CdkDrag, CdkDragHandle],
   template: `
-    <div class="card-dialog" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+    <div class="card-dialog" cdkDrag cdkDragRootElement=".cdk-overlay-pane" [cdkDragDisabled]="phone">
       <div class="card-dialog-header" cdkDragHandle>
         <span>{{ data.title }}</span>
         <button type="button" aria-label="Close" (click)="ref.close()">✕</button>
@@ -26,4 +26,6 @@ export interface CardDialogData {
 export class CardDialogComponent {
   protected readonly data = inject<CardDialogData>(DIALOG_DATA);
   protected readonly ref = inject(DialogRef);
+  /** Same breakpoint as the stylesheet: the dialog is a fixed full-screen sheet there. */
+  protected readonly phone = matchMedia('(max-width: 720px)').matches;
 }

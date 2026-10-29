@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.breadcrumb {
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.breadcrumb::-webkit-scrollbar {
+  display: none;
+}
+ol {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  white-space: nowrap;
+}
+li {
+  flex: none;
+  display: flex;
+  align-items: center;
+}
+li + li::before {
+  content: '/';
+  margin: 0 8px;
+  color: var(--muted);
+}
+a {
+  color: var(--muted);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+[aria-current='page'] {
+  font-weight: 600;
+}
