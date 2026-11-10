@@ -1,6 +1,13 @@
 # 1. DIVERSITY IN THE LIVING WORLD
 
-- [1.1 THE LIVING WORLD](1-1-the-living-world.md)
-- [1.2 BIOLOGICAL CLASSIFICATION](1-2-biological-classification.md)
-- [1.3 PLANT KINGDOM](1-3-plant-kingdom.md)
-- [1.4 ANIMAL KINGDOM](1-4-animal-kingdom.md)
+Biology is the science of life forms and living processes. The living world comprises an amazing diversity of living organisms. Early man could easily perceive the difference between inanimate matter and living organisms. Early man deified some of the inanimate matter (wind, sea, fire etc.) and some among the animals and plants. A common feature of all such forms of inanimate and animate objects was the sense of awe or fear that they evoked. The description of living organisms including human beings began much later in human history. Societies which indulged in anthropocentric view of biology could register limited progress in biological knowledge. Systematic and monumental description of life forms brought in, out of necessity, detailed systems of identification, nomenclature and classification. The biggest spin off of such studies was the recognition of the sharing of similarities among living organisms both horizontally and vertically. That all present day living organisms are related to each other and also to all organisms that ever lived on this earth, was a revelation which humbled man and led to cultural movements for conservation of biodiversity. In the following chapters of this unit, you will get a description, including classification, of animals and plants from a taxonomist’s perspective.
+
+
+<div class="nav-only">
+
+- [1.1 THE LIVING WORLD](1-1-the-living-world/index.md)
+- [1.2 BIOLOGICAL CLASSIFICATION](1-2-biological-classification/index.md)
+- [1.3 PLANT KINGDOM](1-3-plant-kingdom/index.md)
+- [1.4 ANIMAL KINGDOM](1-4-animal-kingdom/index.md)
+
+</div>
