@@ -1,6 +1,8 @@
 app-doc-viewer {
   display: block;
   max-width: 100%;
+  /* Empty space after the last line, so the end of a page can be scrolled up away from the screen's edge. */
+  padding-bottom: 30vh;
 }
 /* Links the left panel reads from the markdown to build its tree, but the page itself does not list. */
 app-doc-viewer .nav-only {
