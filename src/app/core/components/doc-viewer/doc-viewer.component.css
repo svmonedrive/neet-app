@@ -6,6 +6,35 @@ app-doc-viewer {
 app-doc-viewer .nav-only {
   display: none;
 }
+/* A left-to-right chain of labels joined by arrows, e.g. the taxonomic hierarchy; it wraps on a narrow screen. */
+app-doc-viewer .taxa-chain {
+  display: block;
+  margin: 16px 0;
+  padding: 16px 28px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  text-align: center;
+}
+app-doc-viewer .taxa-chain ol {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 4px 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+app-doc-viewer .taxa-chain li + li::before {
+  content: '\2192';
+  margin: 0 10px;
+}
+app-doc-viewer .taxa-chain figcaption {
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
 app-doc-viewer mark {
   background: var(--highlight);
   color: inherit;
@@ -36,6 +65,12 @@ app-doc-viewer table a:hover {
 }
 app-doc-viewer th {
   position: relative;
+  /* A softer shade of the text colour, in both light and dark themes. */
+  color: color-mix(in srgb, var(--text) 72%, var(--bg));
+  text-align: left;
+}
+app-doc-viewer :is(th, td:first-child) {
+  background: var(--table-tint);
 }
 app-doc-viewer .table-wrap {
   position: relative;

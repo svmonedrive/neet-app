@@ -27,6 +27,8 @@
   --column-3: #c2410c;
   /* Background for <mark> highlights in the rendered markdown. */
   --highlight: #fef08a;
+  /* Table header row and first column. */
+  --table-tint: #f3f6fb;
 }
 
 :root[data-theme='dark'] {
@@ -46,6 +48,7 @@
   --column-2: #60a5fa;
   --column-3: #fb923c;
   --highlight: #854d0e;
+  --table-tint: #1d2230;
 }
 
 body {
