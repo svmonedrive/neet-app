@@ -6,5 +6,6 @@ How wonderful is the living world! The wide range of living types is amazing. Th
 
 - [1.1.1 Diversity in the Living World](1-1-1-diversity-in-the-living-world.md)
 - [1.1.2 Taxonomic Categories](1-1-2-taxonomic-categories.md)
+- [1.1.3 Summary](1-1-3-summary.md)
 
 </div>
