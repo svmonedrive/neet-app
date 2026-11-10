@@ -72,10 +72,33 @@ app-doc-viewer th {
 app-doc-viewer :is(th, td:first-child) {
   background: var(--table-tint);
 }
+/* Room above and below every table; the top margin of a boxed table also clears its title/button strip. */
+app-doc-viewer table {
+  margin: 16px 0;
+}
 app-doc-viewer .table-wrap {
   position: relative;
   width: fit-content;
-  margin-top: 28px;
+  margin: 44px 0 20px;
+}
+app-doc-viewer .table-wrap > table {
+  margin: 0;
+}
+app-doc-viewer .table-title {
+  margin: 0 0 6px;
+  font-weight: 600;
+}
+/* Inside the table's box the title sits in the strip above it, level with the expand button. */
+app-doc-viewer .table-wrap > .table-title {
+  position: absolute;
+  top: -26px;
+  left: 0;
+  right: 52px;
+  margin: 0;
+  line-height: 26px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 app-doc-viewer .table-expand {
   position: absolute;
@@ -177,8 +200,14 @@ app-doc-viewer .avatar {
   app-doc-viewer .table-wrap {
     width: auto;
     max-width: 100%;
-    margin-top: 0;
+    margin: 16px 0;
     overflow-x: auto;
+  }
+  app-doc-viewer .table-wrap > .table-title {
+    position: static;
+    margin-bottom: 6px;
+    line-height: inherit;
+    white-space: normal;
   }
   app-doc-viewer .table-expand,
   app-doc-viewer .col-resizer {

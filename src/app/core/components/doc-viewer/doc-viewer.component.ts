@@ -113,6 +113,12 @@ export class DocViewerComponent {
     button.textContent = '⇔';
     table.replaceWith(wrap);
     wrap.append(button, table);
+    // `<p class="table-title">…</p>` just before a table becomes its title, in the top-left corner.
+    const title = wrap.previousElementSibling;
+    if (title?.classList.contains('table-title')) {
+      title.setAttribute('title', title.textContent ?? '');
+      wrap.prepend(title);
+    }
 
     let restore: { table: string; cols: string[] } | null = null;
     button.addEventListener('click', () => {
