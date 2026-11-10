@@ -2,6 +2,10 @@ app-doc-viewer {
   display: block;
   max-width: 100%;
 }
+/* Links the left panel reads from the markdown to build its tree, but the page itself does not list. */
+app-doc-viewer .nav-only {
+  display: none;
+}
 app-doc-viewer mark {
   background: var(--highlight);
   color: inherit;

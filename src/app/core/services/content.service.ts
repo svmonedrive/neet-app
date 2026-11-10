@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Lexer, Token, Tokens, marked } from 'marked';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, catchError, map, switchMap, tap, throwError } from 'rxjs';
 
 export interface Entry {
   title: string;
@@ -36,24 +36,23 @@ export class ContentService {
    * Raw markdown for a route path under <subject>:
    *  - `index`                          -> <subject>/index.md
    *  - `04-plant-physiology`            -> <subject>/04-plant-physiology/index.md (a chapter)
-   *  - `04-plant-physiology/4-1-photo`  -> <subject>/04-plant-physiology/4-1-photo.md (a sub-chapter)
+   *  - `04-plant-physiology/4-1-photo`  -> <subject>/04-plant-physiology/4-1-photo/index.md when the
+   *    page has children of its own, else <subject>/04-plant-physiology/4-1-photo.md
    * Relative images are made absolute and relative `.md` links become app routes.
    */
   chapter(subject: string, path: string): Observable<Chapter> {
-    const isChapter = path !== 'index' && !path.includes('/');
-    const file = isChapter ? `${path}/index` : path;
-    const dir = file.includes('/') ? file.slice(0, file.lastIndexOf('/') + 1) : '';
-    const base = `${CONTENT_ROOT}/${subject}/${dir}`;
-    return this.read(`${subject}/${file}.md`).pipe(
-      map((md) =>
-        md
+    return this.page(subject, path).pipe(
+      map(({ file, md }) => {
+        const dir = file.includes('/') ? file.slice(0, file.lastIndexOf('/') + 1) : '';
+        const base = `${CONTENT_ROOT}/${subject}/${dir}`;
+        return md
           .replace(/(!\[[^\]]*\]\()(?!https?:|\/|data:)([^)\s]+)/g, (_, open, src) => open + base + src)
           .replace(/(<img\b[^>]*?\bsrc=")(?!https?:|\/|data:)([^"]+)/g, (_, open, src) => open + base + src)
           .replace(
             /(?<!!)(\[[^\]]*\]\()(?!https?:|\/|#|mailto:)([^)\s#]+?)\.md(#[^)\s]*)?\)/g,
             (_, open, target, hash = '') => `${open}${this.route(subject, dir + target)}${hash})`,
-          ),
-      ),
+          );
+      }),
       map((markdown) => ({ markdown })),
     );
   }
@@ -65,27 +64,28 @@ export class ContentService {
   readonly titles = signal<Record<string, string>>({});
 
   /**
-   * The pages directly below a route path, from the `.md` links in its markdown. A chapter's
-   * children sit beside its index.md; a sub-chapter `x` keeps its children in the folder `x/`, so
-   * only links into that folder count and cross-references to other pages are ignored.
+   * The pages directly below a route path, from the `.md` links in its markdown. A page with
+   * children is a folder: its own text is `x/index.md` and the children sit beside it, as
+   * `child.md` or, when they have children too, `child/index.md`. Older sub-chapters keep their
+   * text in `x.md` with the children in a folder `x/` beside it; only links into that folder count
+   * and cross-references to other pages are ignored.
    */
   children(subject: string, path: string): Observable<Entry[]> {
-    const isChapter = !path.includes('/');
-    const file = isChapter ? `${path}/index` : path;
     const name = path.slice(path.lastIndexOf('/') + 1);
-    const parentDir = isChapter ? `${path}/` : path.slice(0, path.length - name.length);
-    const prefix = isChapter ? '' : `${name}/`;
-    return this.read(`${subject}/${file}.md`).pipe(
-      map((md) => {
+    const parentDir = path.slice(0, path.length - name.length);
+    return this.page(subject, path).pipe(
+      map(({ file, md }) => {
+        const folder = file.endsWith('/index');
+        const prefix = folder ? '' : `${name}/`;
         const seen = new Set<string>();
         const entries: Entry[] = [];
         marked.walkTokens(Lexer.lex(md), (token) => {
           if (token.type !== 'link') return;
           const href = (token as Tokens.Link).href;
           if (!/^[^:/#][^:#]*\.md(#.*)?$/.test(href)) return;
-          const target = href.replace(/\.md.*$/, '');
-          if (target === 'index' || !target.startsWith(prefix) || (isChapter && target.includes('/'))) return;
-          const slug = parentDir + target;
+          const target = href.replace(/\.md.*$/, '').replace(/(?<=.)\/index$/, '');
+          if (target === 'index' || !target.startsWith(prefix) || (folder && target.includes('/'))) return;
+          const slug = (folder ? `${path}/` : parentDir) + target;
           if (seen.has(slug)) return;
           seen.add(slug);
           entries.push({ title: (token as Tokens.Link).text, slug, description: '' });
@@ -99,6 +99,20 @@ export class ContentService {
         })),
       ),
     );
+  }
+
+  /** The markdown file behind a route path, and its text. See {@link chapter} for where it lives. */
+  private page(subject: string, path: string): Observable<{ file: string; md: string }> {
+    const candidates = path === 'index' ? ['index'] : path.includes('/') ? [path, `${path}/index`] : [`${path}/index`];
+    const attempt = (i: number): Observable<{ file: string; md: string }> =>
+      this.read(`${subject}/${candidates[i]}.md`).pipe(
+        // A dev server answers a missing file with the app's index.html, so that counts as missing too.
+        switchMap((md) =>
+          /^\s*<!doctype html/i.test(md) ? throwError(() => new Error('not found')) : [{ file: candidates[i], md }],
+        ),
+        catchError((error) => (i + 1 < candidates.length ? attempt(i + 1) : throwError(() => error))),
+      );
+    return attempt(0);
   }
 
   /** App route for a content path:`04-x/index` -> `/biology/04-x`, `04-x/4-1-y` -> `/biology/04-x/4-1-y`. */
