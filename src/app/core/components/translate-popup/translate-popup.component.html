@@ -9,9 +9,61 @@
   <div class="word">{{ word() }}</div>
   @if (meaning.isLoading()) {
     <p class="hint">Looking up&hellip;</p>
-  } @else if (meaning.value(); as bengali) {
-    <div class="meaning" lang="bn">{{ bengali }}</div>
+  } @else if (askToken()) {
+    <p class="hint">Paste a GitHub token with write access to change meanings. It stays in this browser.</p>
+    <form class="add" (submit)="$event.preventDefault(); submitToken()">
+      <input
+        type="text"
+        class="secret"
+        placeholder="GitHub token"
+        aria-label="GitHub token"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        data-lpignore="true"
+        data-1p-ignore
+        data-bwignore
+        data-form-type="other"
+        [value]="tokenDraft()"
+        (input)="tokenDraft.set($any($event.target).value)"
+      />
+      <button type="submit" [disabled]="!tokenDraft().trim() || saving()">{{ saving() ? 'Saving…' : 'Save' }}</button>
+    </form>
+    @if (error(); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
+  } @else if (shown(); as bengali) {
+    <div class="meaning-row">
+      <div class="meaning" lang="bn">{{ bengali }}</div>
+      <button
+        type="button"
+        class="remove"
+        title="Remove this meaning"
+        aria-label="Remove this meaning"
+        [disabled]="saving()"
+        (click)="remove()"
+      >
+        {{ saving() ? '…' : '×' }}
+      </button>
+    </div>
+    @if (error(); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
   } @else {
-    <p class="hint">No Bengali meaning added yet. Add it to <code>content/translation.json</code>.</p>
+    <p class="hint">No Bengali meaning added yet.</p>
+    <form class="add" (submit)="$event.preventDefault(); add()">
+      <input
+        type="text"
+        lang="bn"
+        placeholder="Paste the Bengali meaning"
+        aria-label="Bengali meaning of {{ word() }}"
+        [value]="draft()"
+        (input)="draft.set($any($event.target).value)"
+      />
+      <button type="submit" [disabled]="!draft().trim() || saving()">{{ saving() ? 'Adding…' : 'Add' }}</button>
+    </form>
+    @if (error(); as message) {
+      <p class="error" role="alert">{{ message }}</p>
+    }
   }
 </div>

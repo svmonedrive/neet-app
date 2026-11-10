@@ -28,3 +28,75 @@
   color: var(--muted);
   font-size: 0.875rem;
 }
+.add {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+}
+.add input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: inherit;
+  font-family: 'Nirmala UI', 'Noto Sans Bengali', 'Kohinoor Bangla', 'Segoe UI', sans-serif;
+  font-size: 1rem;
+}
+.add input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: -1px;
+}
+.add button {
+  padding: 6px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+.add button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.error {
+  margin: 6px 0 0;
+  color: var(--danger);
+  font-size: 0.8125rem;
+}
+/* Hides the token like a password field, but as a text field so browsers do not offer to save it. */
+.add input.secret {
+  -webkit-text-security: disc;
+  font-family: var(--font-monospace);
+}
+.meaning-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+.meaning-row .meaning {
+  min-width: 0;
+}
+.remove {
+  flex: none;
+  margin-top: 4px;
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: none;
+  color: var(--danger);
+  font-size: 1rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.remove:hover:not(:disabled) {
+  border-color: var(--danger);
+}
+.remove:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

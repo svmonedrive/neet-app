@@ -30,17 +30,18 @@ export class DocViewerComponent {
     // The popup is fixed to the screen, so close it when the user clicks elsewhere, presses Esc
     // or scrolls (scroll events do not bubble, hence the capture phase).
     const close = () => this.lookup.set(null);
-    const onClick = (event: MouseEvent) => {
-      if (!(event.target as Element).closest('app-translate-popup')) close();
-    };
+    const outsidePopup = (event: Event) => !(event.target as Element).closest?.('app-translate-popup');
+    const onClick = (event: MouseEvent) => outsidePopup(event) && close();
+    // Text scrolling inside the popup's own input (a long pasted token) must not close it.
+    const onScroll = (event: Event) => outsidePopup(event) && close();
     const onKeydown = (event: KeyboardEvent) => event.key === 'Escape' && close();
     document.addEventListener('click', onClick);
     document.addEventListener('keydown', onKeydown);
-    document.addEventListener('scroll', close, true);
+    document.addEventListener('scroll', onScroll, true);
     inject(DestroyRef).onDestroy(() => {
       document.removeEventListener('click', onClick);
       document.removeEventListener('keydown', onKeydown);
-      document.removeEventListener('scroll', close, true);
+      document.removeEventListener('scroll', onScroll, true);
     });
   }
 
